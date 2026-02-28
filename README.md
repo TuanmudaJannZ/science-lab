@@ -32,7 +32,7 @@ Visualisasikan hukum fisika langsung di browser — tanpa instalasi, tanpa backe
 
 <br>
 
-![ScienceLab Virtual Screenshot](https://via.placeholder.com/900x500/0f172a/00d4ff?text=ScienceLab+Virtual+—+Gravity+Simulation)
+![ScienceLab Virtual Screenshot](https://science-lab.edgeone.app/file_000000003fc471fab3eafe9d14a0a811.png)
 
 </div>
 
