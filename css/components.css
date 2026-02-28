@@ -1,0 +1,252 @@
+/* =========================================
+   components.css — Reusable components
+   ========================================= */
+
+/* ── Binary rain background ── */
+.binary-bg {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+#binary-canvas {
+  width: 100%; height: 100%;
+  opacity: 0.04;
+}
+
+/* ── Tutorial overlay ── */
+.tutorial-overlay {
+  position: fixed; inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 32px;
+  pointer-events: none;
+}
+
+.tutorial-card {
+  pointer-events: all;
+  max-width: 460px;
+  width: 100%;
+  padding: 28px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 -4px 60px rgba(0,212,255,0.15), 0 40px 80px rgba(0,0,0,0.8);
+  animation: slide-up 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.tutorial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.tutorial-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--cyan);
+  background: var(--cyan-dim);
+  border: 1px solid var(--border-hi);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.tutorial-step {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-3);
+}
+.tutorial-title {
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+.tutorial-body {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.tutorial-formula {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  text-align: center;
+  color: var(--amber);
+  background: rgba(245,158,11,0.07);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  margin-bottom: 18px;
+  letter-spacing: 0.06em;
+}
+.tutorial-nav {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.btn-tut {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  color: var(--cyan);
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.btn-tut:hover { background: var(--cyan-dim); }
+.btn-tut:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-tut.primary {
+  background: var(--cyan);
+  color: var(--bg-0);
+  border-color: var(--cyan);
+  font-weight: 600;
+}
+.btn-tut.primary:hover { box-shadow: var(--cyan-glow); }
+
+/* ── Hero animated grid ── */
+.grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  animation: grid-shift 20s linear infinite;
+}
+@keyframes grid-shift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 50px 50px, 50px 50px; }
+}
+
+/* ── Glow orbs (hero decoration) ── */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: orb-float 8s ease-in-out infinite alternate;
+}
+.orb-1 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,212,255,0.15), transparent);
+  top: 10%; left: 15%;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(139,92,246,0.12), transparent);
+  top: 20%; right: 10%;
+  animation-delay: -4s;
+}
+.orb-3 {
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(59,130,246,0.1), transparent);
+  bottom: 15%; left: 30%;
+  animation-delay: -2s;
+}
+@keyframes orb-float {
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(-30px) scale(1.05); }
+}
+
+/* ── Exp page top bar ── */
+.exp-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 48px;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.exp-breadcrumb { color: var(--text-2); }
+.exp-breadcrumb span { color: var(--cyan); }
+.exp-topbar-right { display: flex; align-items: center; gap: 14px; }
+
+/* ── FPS badge ── */
+.fps-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--green);
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ── Slider with label ── */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.slider-row label { flex: 0 0 auto; min-width: 40px; }
+.slider-row input[type="range"] { flex: 1; }
+.slider-val {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--cyan);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── Section divider ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.divider span {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+/* ── Tooltip ── */
+[data-tip] { position: relative; }
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-2);
+  border: 1px solid var(--border-hi);
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 50;
+}
+[data-tip]:hover::after { opacity: 1; }
+
+/* ── "Coming soon" overlay on disabled cards ── */
+.exp-card.disabled { opacity: 0.55; cursor: not-allowed; }
+.exp-card.disabled:hover { transform: none; box-shadow: none; }

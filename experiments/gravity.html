@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gravitasi Universal — ScienceLab Virtual</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    body { overflow: hidden; }
+    @media (max-width: 768px) { body { overflow: auto; } }
+
+    /* Tutorial toggle button */
+    .tut-toggle {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      cursor: pointer;
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--purple);
+      background: rgba(139,92,246,0.1);
+      color: #a78bfa;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
+    }
+    .tut-toggle:hover { background: rgba(139,92,246,0.2); box-shadow: 0 0 14px rgba(139,92,246,0.3); }
+
+    /* Draggable panel hint */
+    #sim-canvas { cursor: crosshair; }
+  </style>
+</head>
+<body>
+
+<!-- Binary rain background (subtle) -->
+<div class="binary-bg">
+  <canvas id="binary-canvas"></canvas>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <a href="../index.html" class="nav-logo">
+    <div class="logo-icon">⚛</div>
+    SCIENCELAB
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../index.html#fisika" class="active">Fisika</a></li>
+    <li><a href="../index.html#biologi">Biologi</a></li>
+    <li><a href="../index.html#astronomi">Astronomi</a></li>
+  </ul>
+</nav>
+
+<!-- ══ EXPERIMENT PAGE LAYOUT ══ -->
+<div class="exp-page">
+
+  <!-- ── MAIN CANVAS AREA ── -->
+  <main class="exp-main">
+    <!-- Top bar -->
+    <div class="exp-topbar">
+      <div class="exp-breadcrumb">
+        <a href="../index.html" style="color:var(--text-2);">Home</a>
+        &nbsp;/&nbsp;Fisika&nbsp;/&nbsp;<span>Gravitasi Universal</span>
+      </div>
+      <div class="exp-topbar-right">
+        <span class="fps-badge" id="stat-fps">-- FPS</span>
+        <button class="tut-toggle" id="btn-tutorial">📚 Tutorial</button>
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="sim-canvas"></canvas>
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="exp-sidebar">
+
+    <!-- Section: Controls -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Kontrol Simulasi</div>
+      <div class="btn-group" style="margin-bottom:10px;">
+        <button class="btn primary active" id="btn-start">▶ Start</button>
+        <button class="btn" id="btn-pause">⏸ Pause</button>
+        <button class="btn danger" id="btn-reset">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- Section: G Constant -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Konstanta Fisika</div>
+      <div class="control-row">
+        <label>Gravitasi G</label>
+        <div class="slider-row" style="margin-bottom:0;">
+          <input type="range" id="slider-g" min="0.5" max="20" step="0.1" value="6.674">
+          <span class="slider-val" id="val-g">6.67</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-3); margin-top:4px;">
+          F = G · m₁m₂ / r²
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Add Object -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Tambah Benda</div>
+
+      <div class="control-row">
+        <label>Massa (m)</label>
+        <input type="number" id="in-mass" value="10" min="1" max="500" step="1">
+      </div>
+
+      <div class="control-row">
+        <label>Orbit Radius (px)</label>
+        <input type="number" id="in-orbit" value="160" min="50" max="350" step="10">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div class="control-row">
+          <label>Vx awal</label>
+          <input type="number" id="in-vx" value="0" step="0.5">
+        </div>
+        <div class="control-row">
+          <label>Vy awal</label>
+          <input type="number" id="in-vy" value="0" step="0.5">
+        </div>
+      </div>
+
+      <button class="btn primary" id="btn-add" style="width:100%; margin-top:4px;">
+        + Add Object
+      </button>
+    </div>
+
+    <!-- Section: Real-time Stats -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Data Real-Time</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Benda</div>
+          <div class="stat-value" id="stat-objs">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FPS</div>
+          <div class="stat-value" id="stat-fps-s">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">KE (Kinetik)</div>
+          <div class="stat-value" id="stat-ke">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">PE (Potensial)</div>
+          <div class="stat-value" id="stat-pe">--</div>
+        </div>
+        <div class="stat-card wide">
+          <div class="stat-label">Total Energi (E)</div>
+          <div class="stat-value" id="stat-e" style="color:var(--amber);">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Distances -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Jarak Antar Benda</div>
+      <div id="dist-panel">
+        <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-3);">
+          — simulasi berjalan...
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Terminal log -->
+    <div class="sidebar-section" style="flex:1;">
+      <div class="sidebar-title">System Log</div>
+      <div class="terminal" id="terminal-log">
+        <div class="log-line">[BOOT] ScienceLab Virtual v1.0.0</div>
+        <div class="log-line">[INIT] Physics engine ready</div>
+        <div class="log-line">[INIT] Gravity experiment loaded</div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ══ THEORY SECTION (below the simulation on mobile) ══ -->
+<div style="background: var(--bg-1); border-top: 1px solid var(--border); padding: 60px 24px;">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <div class="section-header" style="text-align:left; margin-bottom:32px;">
+      <span class="tag">TEORI</span>
+      <h2 class="section-title" style="margin:12px 0 10px;">Hukum Gravitasi Universal Newton</h2>
+      <p class="section-desc" style="text-align:left; max-width:100%;">
+        Setiap benda bermassa menarik benda lain dengan gaya yang sebanding dengan
+        perkalian massanya dan berbanding terbalik dengan kuadrat jaraknya.
+      </p>
+    </div>
+
+    <div class="formula-block">F = G · m₁ · m₂ / r²</div>
+
+    <div class="theory-grid">
+      <div class="theory-card">
+        <h4>Komponen Formula</h4>
+        <p>
+          <b style="color:var(--cyan)">F</b> = Gaya gravitasi (Newton)<br>
+          <b style="color:var(--cyan)">G</b> = 6.674 × 10⁻¹¹ N·m²/kg² (konstanta gravitasi)<br>
+          <b style="color:var(--cyan)">m₁, m₂</b> = Massa kedua benda (kg)<br>
+          <b style="color:var(--cyan)">r²</b> = Kuadrat jarak antar pusat massa (m)
+        </p>
+      </div>
+      <div class="theory-card">
+        <h4>Orbit Stabil</h4>
+        <p>
+          Orbit melingkar stabil terjadi ketika gaya gravitasi sama persis
+          dengan gaya sentripetal. Kecepatan orbit dihitung:
+          <br><br>
+          <span style="font-family:var(--font-mono);color:var(--amber);">v = √(G·M / r)</span>
+          <br><br>
+          Simulator ini menghitung kecepatan ini otomatis saat menambahkan benda baru.
+        </p>
+      </div>
+      <div class="theory-card">
+        <h4>Energi Sistem</h4>
+        <p>
+          Sistem gravitasi terisolasi adalah konservatif. Energi total:
+          <br><br>
+          <span style="font-family:var(--font-mono);color:var(--amber);">E = KE + PE = konstan</span>
+          <br><br>
+          KE = ½mv² &nbsp;|&nbsp; PE = −G·m₁·m₂/r
+          <br><br>
+          Pantau perubahan energi di panel stats!
+        </p>
+      </div>
+      <div class="theory-card">
+        <h4>Integrasi Euler</h4>
+        <p>
+          Simulator menggunakan metode integrasi Euler berbasis deltaTime:
+          <br><br>
+          <span style="font-family:var(--font-mono);color:var(--amber);">a = F/m<br>v += a·Δt<br>x += v·Δt</span>
+          <br><br>
+          Softening factor mencegah singularitas saat benda terlalu dekat.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>
+    <span style="font-family:var(--font-head); color:var(--cyan);">SCIENCELAB VIRTUAL</span>
+    &nbsp;·&nbsp; Eksperimen: Gravitasi Universal
+    &nbsp;·&nbsp; F = G·m₁m₂/r²
+  </p>
+</footer>
+
+<script type="module">
+  import { GravityExperiment } from '../js/experiments/gravity.js';
+  import { Controls }          from '../js/ui/controls.js';
+  import { Tutorial, GRAVITY_TUTORIAL } from '../js/ui/tutorial.js';
+
+  // ── Binary rain (background) ──
+  (function() {
+    const canvas = document.getElementById('binary-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    const cols = Math.floor(window.innerWidth / 18);
+    const drops = Array.from({ length: cols }, () => Math.random() * -50);
+    const chars = '01アイウ';
+    function draw() {
+      ctx.fillStyle = 'rgba(2,6,23,0.06)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00d4ff';
+      ctx.font = '12px monospace';
+      drops.forEach((y, i) => {
+        const c = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(c, i * 18, y * 18);
+        drops[i] = y > canvas.height / 18 + 20 ? 0 : y + 1;
+      });
+    }
+    setInterval(draw, 80);
+  })();
+
+  // ── Canvas sizing ──
+  const canvas = document.getElementById('sim-canvas');
+  function sizeCanvas() {
+    const main = canvas.parentElement;
+    canvas.width  = main.clientWidth;
+    canvas.height = main.clientHeight - 48; // minus topbar
+  }
+  sizeCanvas();
+  window.addEventListener('resize', () => { sizeCanvas(); exp.resize(canvas.width, canvas.height); });
+
+  // ── Init experiment ──
+  const exp = new GravityExperiment(canvas);
+
+  // ── Wire up controls ──
+  const ctrl = new Controls(exp, {
+    btnStart:  document.getElementById('btn-start'),
+    btnPause:  document.getElementById('btn-pause'),
+    btnReset:  document.getElementById('btn-reset'),
+    btnAdd:    document.getElementById('btn-add'),
+    sliderG:   document.getElementById('slider-g'),
+    valG:      document.getElementById('val-g'),
+    inMass:    document.getElementById('in-mass'),
+    inVx:      document.getElementById('in-vx'),
+    inVy:      document.getElementById('in-vy'),
+    inOrbit:   document.getElementById('in-orbit'),
+    statFPS:   document.getElementById('stat-fps'),
+    statKE:    document.getElementById('stat-ke'),
+    statPE:    document.getElementById('stat-pe'),
+    statE:     document.getElementById('stat-e'),
+    statObjs:  document.getElementById('stat-objs'),
+    distPanel: document.getElementById('dist-panel'),
+  });
+
+  // Sync sidebar FPS badge too
+  const fpsBadge = document.getElementById('stat-fps-s');
+  setInterval(() => {
+    if (fpsBadge) fpsBadge.textContent = exp.fps || '--';
+  }, 500);
+
+  // ── Auto-start ──
+  exp.start();
+
+  // ── Tutorial ──
+  const tutorial = new Tutorial(GRAVITY_TUTORIAL);
+  document.getElementById('btn-tutorial')?.addEventListener('click', () => {
+    if (tutorial.active) tutorial.stop();
+    else tutorial.start();
+  });
+
+  // ── Canvas click: add object at click position ──
+  canvas.addEventListener('click', (e) => {
+    const rect  = canvas.getBoundingClientRect();
+    const cx    = canvas.width  / 2;
+    const cy    = canvas.height / 2;
+    const px    = e.clientX - rect.left;
+    const py    = e.clientY - rect.top;
+    const dx    = px - cx;
+    const dy    = py - cy;
+    const orbitRadius = Math.sqrt(dx*dx + dy*dy);
+    const angle = Math.atan2(dy, dx);
+
+    const mass = parseFloat(document.getElementById('in-mass').value) || 10;
+    exp.addCustomBody({ mass, vx: 0, vy: 0, orbitRadius, angle: angle * 180 / Math.PI });
+  });
+
+  // ── Navbar scroll ──
+  const nav = document.querySelector('.navbar');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 20 ? 'rgba(2,6,23,0.97)' : 'rgba(2,6,23,0.85)';
+  });
+</script>
+</body>
+</html>
