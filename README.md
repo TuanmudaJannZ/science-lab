@@ -201,7 +201,7 @@ engine.addForce((objects) => {
 
 ### 1. Clone & Setup
 ```bash
-git clone https://github.com/yourusername/science-lab.git
+git clone https://github.com/TuanmudaJannZ/science-lab.git
 cd science-lab
 ```
 
@@ -355,7 +355,7 @@ Kredit sangat diapresiasi. ⚛
 
 <div align="center">
 
-**Dibuat dengan ⚛ oleh [Nama Kamu](https://github.com/yourusername)**
+**Dibuat dengan ⚛ oleh [Ahmad Januar D.K](https://github.com/TuanmudaJannZ)**
 
 *"The important thing is to not stop questioning. Curiosity has its own reason for existing."*  
 *— Albert Einstein*
