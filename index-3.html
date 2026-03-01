@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ScienceLab Virtual — Platform eksperimen sains interaktif berbasis web. Simulasi fisika, gravitasi, dan sains modern langsung di browser.">
+  <title>ScienceLab Virtual — Eksperimen Sains Interaktif</title>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<!-- Binary rain background -->
+<div class="binary-bg">
+  <canvas id="binary-canvas"></canvas>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">⚛</div>
+    SCIENCELAB
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="#fisika">Fisika</a></li>
+    <li><a href="#termodinamika">Termo</a></li>
+    <li><a href="#optika">Optika</a></li>
+    <li><a href="#biologi">Biologi</a></li>
+    <li><a href="#astronomi">Astronomi</a></li>
+    <li><a href="#modern">Modern</a></li>
+    <li><a href="#matematika">Matematika</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <canvas id="hero-canvas"></canvas>
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="tag">⚡ VIRTUAL LABORATORY</span>
+      <span class="tag" style="color:var(--green);border-color:var(--green);background:rgba(16,185,129,0.1);">v1.1.0</span>
+    </div>
+
+    <h1 class="hero-title">ScienceLab<br>Virtual</h1>
+
+    <p class="hero-sub">
+      Platform eksperimen sains interaktif berbasis web. Eksplorasi gravitasi universal,
+      elektrostatika Coulomb, dan fenomena sains langsung di browser —
+      tanpa instalasi apapun.
+    </p>
+
+    <div class="hero-cta">
+      <a href="experiments/gravity.html" class="btn primary btn-pulse" style="font-size:0.8rem;padding:12px 28px;">
+        🚀 Mulai Eksperimen
+      </a>
+      <a href="#experiments" class="btn" style="font-size:0.8rem;padding:12px 28px;">
+        Lihat Semua →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIMENTS ══ -->
+<section class="section" id="experiments">
+  <div class="section-header">
+    <span class="tag">LABORATORIUM</span>
+    <h2 class="section-title">Pilih Eksperimen</h2>
+    <p class="section-desc">
+      Setiap eksperimen dibangun dengan physics engine yang akurat dan scalable.
+      Visualisasikan konsep sains secara real-time.
+    </p>
+  </div>
+
+  <!-- ── FISIKA KLASIK ── -->
+  <div class="divider" id="fisika"><span>Fisika Klasik</span></div>
+  <div class="experiments-grid">
+
+    <a href="experiments/gravity.html" style="text-decoration:none;">
+      <div class="exp-card" style="--accent:#f59e0b;">
+        <div class="exp-icon" style="color:#f59e0b;">🌌</div>
+        <div class="exp-title">Gravitasi Universal</div>
+        <p class="exp-desc">Simulasi N-body gravitasi Newton dengan orbit real-time, trail lintasan, dan analisis energi sistem. F = Gm₁m₂/r².</p>
+        <span class="exp-badge active">✓ Available</span>
+      </div>
+    </a>
+
+    <a href="experiments/electrostatics.html" style="text-decoration:none;">
+      <div class="exp-card" style="--accent:#3b82f6;">
+        <div class="exp-icon" style="color:#3b82f6;">⚡</div>
+        <div class="exp-title">Elektrostatika</div>
+        <p class="exp-desc">Hukum Coulomb: gaya antar muatan, garis medan listrik, heatmap potensial, dan vektor gaya. F = kq₁q₂/r².</p>
+        <span class="exp-badge active">✓ Available</span>
+      </div>
+    </a>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">🧲</div>
+      <div class="exp-title">Medan Magnet & Lorentz</div>
+      <p class="exp-desc">Partikel bermuatan dalam medan B. Gerak heliks, cyclotron radius, velocity selector, dan mass spectrometer. F = q(v × B).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#10b981;">
+      <div class="exp-icon" style="color:#10b981;">🌊</div>
+      <div class="exp-title">Gelombang & Interferensi</div>
+      <p class="exp-desc">Superposisi gelombang, interferensi konstruktif/destruktif, difraksi celah Young, dan pola Fraunhofer. y = A·sin(kx−ωt).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f43f5e;">
+      <div class="exp-icon" style="color:#f43f5e;">🔴</div>
+      <div class="exp-title">Pendulum & Osilasi</div>
+      <p class="exp-desc">Bandul sederhana, fisis, dan ganda. Phase portrait, analisis frekuensi, dan transisi ke chaos. θ̈ = −(g/L)·sinθ.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">⚙️</div>
+      <div class="exp-title">Momentum & Tumbukan</div>
+      <p class="exp-desc">Tumbukan elastis & inelastis, center of mass frame, Newton's cradle, koefisien restitusi. Σp = konstan.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#06b6d4;">
+      <div class="exp-icon" style="color:#06b6d4;">🌀</div>
+      <div class="exp-title">Gerak Melingkar & Sentripetal</div>
+      <p class="exp-desc">Gaya sentripetal, kecepatan sudut, percepatan tangensial, dan simulasi tikungan jalan banked curve. a = v²/r.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#84cc16;">
+      <div class="exp-icon" style="color:#84cc16;">🏹</div>
+      <div class="exp-title">Gerak Proyektil</div>
+      <p class="exp-desc">Lintasan parabola dengan drag udara, Magnus effect, dan wind resistance. Optimasi sudut lemparan untuk jarak maksimum.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">🔗</div>
+      <div class="exp-title">Pegas & Getaran</div>
+      <p class="exp-desc">Hukum Hooke, sistem massa-pegas terhubung, resonansi, dan getaran teredam. Visualisasi FFT frekuensi. F = −kx.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#fbbf24;">
+      <div class="exp-icon" style="color:#fbbf24;">⚖️</div>
+      <div class="exp-title">Torsi & Kesetimbangan</div>
+      <p class="exp-desc">Momen gaya, kesetimbangan benda tegar, pusat massa, dan momen inersia berbagai bentuk. τ = r × F.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── TERMODINAMIKA ── -->
+  <div class="divider" id="termodinamika" style="margin-top:64px;"><span>Termodinamika</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">🌡️</div>
+      <div class="exp-title">Kinetik Gas Ideal</div>
+      <p class="exp-desc">Simulasi partikel gas dalam wadah. Distribusi Maxwell-Boltzmann, tekanan, suhu, dan hukum PV = nRT secara visual.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f43f5e;">
+      <div class="exp-icon" style="color:#f43f5e;">🔥</div>
+      <div class="exp-title">Konduksi Panas</div>
+      <p class="exp-desc">Difusi panas pada padatan 2D dengan heatmap real-time. Persamaan Laplace, boundary conditions, dan simulasi pendingin CPU.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f59e0b;">
+      <div class="exp-icon" style="color:#f59e0b;">⚙️</div>
+      <div class="exp-title">Siklus Carnot</div>
+      <p class="exp-desc">Mesin Carnot interaktif. Diagram P-V animasi, efisiensi termodinamika, dan perbandingan siklus ideal vs nyata.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">🌪</div>
+      <div class="exp-title">Entropi & Disorder</div>
+      <p class="exp-desc">Visualisasi peningkatan entropi: partikel dari ruang teratur ke sembarang. Hukum kedua termodinamika secara intuitif. ΔS ≥ 0.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#10b981;">
+      <div class="exp-icon" style="color:#10b981;">💨</div>
+      <div class="exp-title">Konveksi & Aliran Panas</div>
+      <p class="exp-desc">Sel konveksi Rayleigh-Bénard. Aliran fluida diinduksi perbedaan suhu, visualisasi streamline dan vortex termal.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── OPTIKA ── -->
+  <div class="divider" id="optika" style="margin-top:64px;"><span>Optika & Cahaya</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#fbbf24;">
+      <div class="exp-icon" style="color:#fbbf24;">🔦</div>
+      <div class="exp-title">Refraksi & Snell's Law</div>
+      <p class="exp-desc">Ray tracing interaktif: refraksi antar medium, total internal reflection, prisma, dan lensa konvergen/divergen. n₁sinθ₁ = n₂sinθ₂.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#06b6d4;">
+      <div class="exp-icon" style="color:#06b6d4;">🌈</div>
+      <div class="exp-title">Dispersi & Spektrum</div>
+      <p class="exp-desc">Pemisahan cahaya putih oleh prisma, pelangi, dan indeks bias vs panjang gelombang. Visualisasi spektrum visible light.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">🔭</div>
+      <div class="exp-title">Optika Geometri & Cermin</div>
+      <p class="exp-desc">Cermin cekung, cembung, dan datar. Pembentukan bayangan nyata/maya, perbesaran, dan rumus lensa tipis. 1/f = 1/do + 1/di.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">💡</div>
+      <div class="exp-title">Polarisasi Cahaya</div>
+      <p class="exp-desc">Efek polarisasi, hukum Malus, sudut Brewster, dan visualisasi osilasi medan E pada berbagai orientasi polarisator.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">🎯</div>
+      <div class="exp-title">Difraksi & Holografi</div>
+      <p class="exp-desc">Pola difraksi kisi, celah tunggal, apertur melingkar Airy disk, dan resolusi teleskop. Prinsip Huygens-Fresnel.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── SISTEM LANJUTAN ── -->
+  <div class="divider" id="advanced" style="margin-top:64px;"><span>Sistem Lanjutan & Chaos</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#06b6d4;">
+      <div class="exp-icon" style="color:#06b6d4;">🌪</div>
+      <div class="exp-title">Lorenz Attractor</div>
+      <p class="exp-desc">Strange attractor 3D dalam proyeksi 2D. Butterfly effect, sensitivitas kondisi awal, dimensi fraktal Hausdorff. dx/dt = σ(y−x).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f59e0b;">
+      <div class="exp-icon" style="color:#f59e0b;">🔁</div>
+      <div class="exp-title">Double Pendulum</div>
+      <p class="exp-desc">Chaotic motion sistem dua pendulum. Lagrangian mechanics, Poincaré sections, Lyapunov exponent, dan phase space visualization.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#3b82f6;">
+      <div class="exp-icon" style="color:#3b82f6;">💧</div>
+      <div class="exp-title">2D Fluid Simulation</div>
+      <p class="exp-desc">Eulerian grid-based CFD. Pressure Poisson solver, viscosity, divergence-free velocity field. Navier-Stokes disederhanakan.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#8b5cf6;">
+      <div class="exp-icon" style="color:#8b5cf6;">🐦</div>
+      <div class="exp-title">Swarm — Boids</div>
+      <p class="exp-desc">Emergent flocking behavior dari 3 aturan sederhana: separation, alignment, cohesion. Ribuan agen, obstacle avoidance.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">🌿</div>
+      <div class="exp-title">L-System & Fraktal</div>
+      <p class="exp-desc">Pertumbuhan tanaman fraktal berbasis Lindenmayer grammar. Sierpinski triangle, Koch snowflake, Barnsley fern interaktif.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#84cc16;">
+      <div class="exp-icon" style="color:#84cc16;">🎮</div>
+      <div class="exp-title">Cellular Automata</div>
+      <p class="exp-desc">Conway's Game of Life, Rule 110, dan Wolfram's elementary CA. Emergent complexity dari aturan lokal sederhana.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f43f5e;">
+      <div class="exp-icon" style="color:#f43f5e;">🌊</div>
+      <div class="exp-title">Reaction-Diffusion</div>
+      <p class="exp-desc">Sistem Turing: pola belang zebra, bintik macan tutul, dan spiral muncul dari dua kimia yang berinteraksi. du/dt = DᵤΔu + f(u,v).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">🔀</div>
+      <div class="exp-title">N-Body Barnes-Hut</div>
+      <p class="exp-desc">Optimasi N-body O(n log n) dengan quadtree. Simulasi 1000+ benda gravitasi secara real-time tanpa lag. Θ = 0.5.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── BIOLOGI & EKOLOGI ── -->
+  <div class="divider" id="biologi" style="margin-top:64px;"><span>Biologi & Ekologi</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#84cc16;">
+      <div class="exp-icon" style="color:#84cc16;">🧬</div>
+      <div class="exp-title">Predator-Prey</div>
+      <p class="exp-desc">Model Lotka-Volterra. Siklus populasi predator dan mangsa, phase portrait, bifurcation diagram, dan equilibrium analysis.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#10b981;">
+      <div class="exp-icon" style="color:#10b981;">🌱</div>
+      <div class="exp-title">Ecosystem Multi-Species</div>
+      <p class="exp-desc">Multi-agent simulation ekosistem kompleks. Rantai makanan trophic levels, resource depletion, carrying capacity.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">🦠</div>
+      <div class="exp-title">Virus Spread — SIR/SEIR</div>
+      <p class="exp-desc">Model epidemiologi S→E→I→R. R₀, herd immunity, vaksinasi, lockdown, dan perbandingan model COVID vs influenza.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">🧠</div>
+      <div class="exp-title">Neural Field Visual</div>
+      <p class="exp-desc">Energy field mapping grid neural berbasis Wilson-Cowan. Activator-inhibitor, traveling waves, dan spiral waves.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#06b6d4;">
+      <div class="exp-icon" style="color:#06b6d4;">🐜</div>
+      <div class="exp-title">Ant Colony — Stigmergy</div>
+      <p class="exp-desc">Koloni semut mencari jalur optimal lewat pheromone trail. Emergent shortest-path algorithm, ACO optimization visualization.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f59e0b;">
+      <div class="exp-icon" style="color:#f59e0b;">🧫</div>
+      <div class="exp-title">Difusi Membran Sel</div>
+      <p class="exp-desc">Difusi Fick, osmosis, transport aktif, dan gradien konsentrasi menembus membran biologis semi-permeabel.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f43f5e;">
+      <div class="exp-icon" style="color:#f43f5e;">🧬</div>
+      <div class="exp-title">Evolusi Genetika</div>
+      <p class="exp-desc">Simulasi seleksi alam, mutasi, genetic drift, dan Hardy-Weinberg equilibrium. Visualisasi frekuensi alel dari generasi ke generasi.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── KIMIA KOMPUTASI ── -->
+  <div class="divider" id="kimia" style="margin-top:64px;"><span>Kimia Komputasi</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#3b82f6;">
+      <div class="exp-icon" style="color:#3b82f6;">⚗️</div>
+      <div class="exp-title">Kinetika Reaksi</div>
+      <p class="exp-desc">Orde reaksi, konstanta laju Arrhenius, dan simulasi tabrakan molekul. Visualisasi konsentrasi reaktan/produk vs waktu. d[A]/dt = −k[A]ⁿ.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#10b981;">
+      <div class="exp-icon" style="color:#10b981;">🔵</div>
+      <div class="exp-title">Molecular Dynamics</div>
+      <p class="exp-desc">Simulasi molekul dengan Lennard-Jones potential. Fase padat, cair, gas, dan transisi fase. Radial distribution function.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">🧪</div>
+      <div class="exp-title">Titrasi Asam-Basa</div>
+      <p class="exp-desc">Kurva titrasi interaktif, equivalence point, buffer capacity, dan simulasi pH meter real-time untuk berbagai pasangan asam-basa.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">⚛️</div>
+      <div class="exp-title">Orbital Atom & Kuantum</div>
+      <p class="exp-desc">Visualisasi orbital s, p, d hidrogen. Probability density, quantum numbers, dan electron cloud 2D. ψ²(r,θ,φ).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">🔗</div>
+      <div class="exp-title">Ikatan Kimia & VSEPR</div>
+      <p class="exp-desc">Geometri molekul 3D berbasis VSEPR theory. Hibridisasi orbital, momen dipol, dan energi ikatan berbagai senyawa.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── ASTRONOMI & KOSMOLOGI ── -->
+  <div class="divider" id="astronomi" style="margin-top:64px;"><span>Astronomi & Kosmologi</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#8b5cf6;">
+      <div class="exp-icon" style="color:#8b5cf6;">🪐</div>
+      <div class="exp-title">Tata Surya 3D</div>
+      <p class="exp-desc">Simulasi tata surya 3D dengan Three.js. Hukum Kepler, orbit elips, kemiringan aksial, bulan-bulan planet, dan asteroid belt.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#475569;">
+      <div class="exp-icon" style="color:#64748b;">🌑</div>
+      <div class="exp-title">Black Hole Lensing</div>
+      <p class="exp-desc">Gravitational lensing Schwarzschild. Photon sphere, lintasan foton, event horizon, dan shader accretion disk. rs = 2GM/c².</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#06b6d4;">
+      <div class="exp-icon" style="color:#06b6d4;">🌌</div>
+      <div class="exp-title">Galaxy Rotation</div>
+      <p class="exp-desc">Anomali kurva rotasi galaksi, model NFW dark matter halo. Mengapa bintang tepi berputar secepat bintang inti?</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">🚀</div>
+      <div class="exp-title">Rocket & Orbital Mechanics</div>
+      <p class="exp-desc">Tsiolkovsky equation, gravity turn, Hohmann transfer, dan orbital insertion. Design your own rocket staging. Δv = ve·ln(m₀/mf).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f59e0b;">
+      <div class="exp-icon" style="color:#f59e0b;">⭐</div>
+      <div class="exp-title">Evolusi Bintang</div>
+      <p class="exp-desc">Diagram Hertzsprung-Russell interaktif. Siklus hidup bintang: nebula → main sequence → red giant → supernova → white dwarf/neutron star.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">🌠</div>
+      <div class="exp-title">Kosmologi & Big Bang</div>
+      <p class="exp-desc">Ekspansi alam semesta, pergeseran merah Hubble, CMB, dark energy, dan simulasi pertumbuhan large-scale structure. H₀ = 67.4 km/s/Mpc.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">🌊</div>
+      <div class="exp-title">Gravitational Waves</div>
+      <p class="exp-desc">Visualisasi gelombang gravitasi dari merger black hole dan neutron star. Strain amplitude, chirp signal, dan detektor LIGO analog.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#10b981;">
+      <div class="exp-icon" style="color:#10b981;">🛸</div>
+      <div class="exp-title">Lagrange Points</div>
+      <p class="exp-desc">Lima titik Lagrange dalam sistem dua benda. Efective potential, stabilitas L4/L5, Trojan asteroids, dan misi James Webb telescope.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── RELATIVITAS & FISIKA MODERN ── -->
+  <div class="divider" id="modern" style="margin-top:64px;"><span>Relativitas & Fisika Modern</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#f43f5e;">
+      <div class="exp-icon" style="color:#f43f5e;">⚡</div>
+      <div class="exp-title">Relativitas Khusus</div>
+      <p class="exp-desc">Time dilation, length contraction, dan relativistic momentum. Visualisasi Minkowski spacetime diagram. E = γmc².</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">🌀</div>
+      <div class="exp-title">Geodesik Spacetime</div>
+      <p class="exp-desc">Kelengkungan ruang-waktu di sekitar massa besar. Visualisasi rubber-sheet analogy, precession orbit Merkurius. gμν.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#06b6d4;">
+      <div class="exp-icon" style="color:#06b6d4;">🎲</div>
+      <div class="exp-title">Mekanika Kuantum</div>
+      <p class="exp-desc">Partikel dalam kotak, tunneling kuantum, dan prinsip ketidakpastian Heisenberg. Visualisasi fungsi gelombang ψ dan ψ². ΔxΔp ≥ ℏ/2.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f59e0b;">
+      <div class="exp-icon" style="color:#f59e0b;">🔬</div>
+      <div class="exp-title">Model Atom Bohr</div>
+      <p class="exp-desc">Transisi elektron, spektrum emisi hidrogen, seri Balmer/Lyman, dan visualisasi tingkat energi kuantum. En = −13.6/n² eV.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#84cc16;">
+      <div class="exp-icon" style="color:#84cc16;">☢️</div>
+      <div class="exp-title">Peluruhan Radioaktif</div>
+      <p class="exp-desc">Simulasi stokastik peluruhan α, β, γ. Waktu paruh, rantai peluruhan, activity vs time, dan radiocarbon dating model.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#ec4899;">
+      <div class="exp-icon" style="color:#ec4899;">💥</div>
+      <div class="exp-title">Fisika Partikel</div>
+      <p class="exp-desc">Simulasi tabrakan partikel di akselerator. Standard model particles, quark confinement, dan visualisasi Feynman diagram interaktif.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+  <!-- ── MATEMATIKA VISUAL ── -->
+  <div class="divider" id="matematika" style="margin-top:64px;"><span>Matematika Visual</span></div>
+  <div class="experiments-grid">
+
+    <div class="exp-card disabled" style="--accent:#3b82f6;">
+      <div class="exp-icon" style="color:#3b82f6;">📈</div>
+      <div class="exp-title">Transformasi Fourier</div>
+      <p class="exp-desc">Dekomposisi sinyal ke frekuensi komponen. FFT real-time, spektrum amplitudo/fase, filter sinyal, dan epicycle animation.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#10b981;">
+      <div class="exp-icon" style="color:#10b981;">🌀</div>
+      <div class="exp-title">Persamaan Diferensial</div>
+      <p class="exp-desc">Slope field visualizer, Euler/RK4 solver interaktif, phase portrait, dan klasifikasi critical points: saddle, spiral, node.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f97316;">
+      <div class="exp-icon" style="color:#f97316;">🔷</div>
+      <div class="exp-title">Fraktal & Mandelbrot</div>
+      <p class="exp-desc">Mandelbrot set dan Julia set dengan zoom interaktif. Iterasi kompleks z → z² + c, color mapping escape time, dan infinite zoom.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#a855f7;">
+      <div class="exp-icon" style="color:#a855f7;">📐</div>
+      <div class="exp-title">Transformasi Linear</div>
+      <p class="exp-desc">Visualisasi 3Blue1Brown-style: matriks sebagai transformasi ruang, determinan, eigenvector/eigenvalue, dan SVD decomposition.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#f43f5e;">
+      <div class="exp-icon" style="color:#f43f5e;">🎵</div>
+      <div class="exp-title">Harmoni & Resonansi</div>
+      <p class="exp-desc">Kurva Lissajous, rasio frekuensi harmonis, standing waves pada string, dan visualisasi overtone muskal. sin(nx) + sin(ny).</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+    <div class="exp-card disabled" style="--accent:#fbbf24;">
+      <div class="exp-icon" style="color:#fbbf24;">🕸️</div>
+      <div class="exp-title">Graf & Network Theory</div>
+      <p class="exp-desc">Visualisasi graph force-directed. Shortest path Dijkstra, spanning tree, small-world network, dan scale-free Barabási-Albert model.</p>
+      <span class="exp-badge soon">Coming Soon</span>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ══ TECH SECTION ══ -->
+<section class="section" style="background: var(--bg-1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div style="max-width:900px; margin: 0 auto; text-align:center;">
+    <span class="tag">ARSITEKTUR</span>
+    <h2 class="section-title" style="margin:16px 0 12px;">Dibangun untuk Ilmuwan Modern</h2>
+    <p class="section-desc" style="margin-bottom:48px;">
+      Modular physics engine berbasis OOP — reusable, scalable, dan siap untuk ekspansi ke 3D.
+    </p>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px;">
+      <div class="glass" style="padding:20px; text-align:center;">
+        <div style="font-size:1.6rem; margin-bottom:8px;">⚡</div>
+        <div style="font-family:var(--font-head); font-size:0.75rem; color:var(--cyan); margin-bottom:6px;">PHYSICS ENGINE</div>
+        <div style="font-size:0.82rem; color:var(--text-2);">DeltaTime + Euler Integration</div>
+      </div>
+      <div class="glass" style="padding:20px; text-align:center;">
+        <div style="font-size:1.6rem; margin-bottom:8px;">🧮</div>
+        <div style="font-family:var(--font-head); font-size:0.75rem; color:var(--cyan); margin-bottom:6px;">VECTOR MATH</div>
+        <div style="font-size:0.82rem; color:var(--text-2);">2D Vector library extensible ke 3D</div>
+      </div>
+      <div class="glass" style="padding:20px; text-align:center;">
+        <div style="font-size:1.6rem; margin-bottom:8px;">🎨</div>
+        <div style="font-family:var(--font-head); font-size:0.75rem; color:var(--cyan); margin-bottom:6px;">CANVAS 2D</div>
+        <div style="font-size:0.82rem; color:var(--text-2);">60fps rendering + trail effects</div>
+      </div>
+      <div class="glass" style="padding:20px; text-align:center;">
+        <div style="font-size:1.6rem; margin-bottom:8px;">📱</div>
+        <div style="font-family:var(--font-head); font-size:0.75rem; color:var(--cyan); margin-bottom:6px;">RESPONSIVE</div>
+        <div style="font-size:0.82rem; color:var(--text-2);">Mobile-first, no framework</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <p>
+    <span style="font-family:var(--font-head); color:var(--cyan);">SCIENCELAB VIRTUAL</span>
+    &nbsp;·&nbsp;
+    Built with Vanilla JS + Physics Engine
+    &nbsp;·&nbsp;
+    <span style="color: var(--text-3);">Open Source Portfolio Project</span>
+  </p>
+  <p style="margin-top:8px; color:var(--text-3);">
+    F = G · m₁ · m₂ / r² &nbsp;·&nbsp; E = mc² &nbsp;·&nbsp; ΔE · Δt ≥ ℏ/2
+  </p>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
