@@ -28,7 +28,7 @@ Visualisasikan hukum fisika langsung di browser — tanpa instalasi, tanpa backe
 
 <br>
 
-[**🚀 Live Demo**](https://yourusername.github.io/science-lab) · [**📖 Dokumentasi**](#arsitektur) · [**🧪 Eksperimen**](#eksperimen) · [**🤝 Kontribusi**](#kontribusi)
+[**🚀 Live Demo**](https://science-lab.jannz.my.id/) · [**📖 Dokumentasi**](#arsitektur) · [**🧪 Eksperimen**](#eksperimen) · [**🤝 Kontribusi**](#kontribusi)
 
 <br>
 
