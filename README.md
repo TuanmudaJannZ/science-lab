@@ -3,14 +3,14 @@
 ```
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
-║   ███████╗ ██████╗██╗███████╗███╗   ██╗ ██████╗███████╗     ║
-║   ██╔════╝██╔════╝██║██╔════╝████╗  ██║██╔════╝██╔════╝     ║
-║   ███████╗██║     ██║█████╗  ██╔██╗ ██║██║     █████╗       ║
-║   ╚════██║██║     ██║██╔══╝  ██║╚██╗██║██║     ██╔══╝       ║
-║   ███████║╚██████╗██║███████╗██║ ╚████║╚██████╗███████╗     ║
-║   ╚══════╝ ╚═════╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝     ║
+║   ███████╗ ██████╗██╗███████╗███╗   ██╗ ██████╗███████╗       ║
+║   ██╔════╝██╔════╝██║██╔════╝████╗  ██║██╔════╝██╔════╝       ║
+║   ███████╗██║     ██║█████╗  ██╔██╗ ██║██║     █████╗         ║
+║   ╚════██║██║     ██║██╔══╝  ██║╚██╗██║██║     ██╔══╝         ║
+║   ███████║╚██████╗██║███████╗██║ ╚████║╚██████╗███████╗       ║
+║   ╚══════╝ ╚═════╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝       ║
 ║                                                               ║
-║              L A B   V I R T U A L  ⚛                        ║
+║                L A B   V I R T U A L  ⚛                      ║
 ║                                                               ║
 ╚═══════════════════════════════════════════════════════════════╝
 ```
@@ -23,7 +23,8 @@ Visualisasikan hukum fisika langsung di browser — tanpa instalasi, tanpa backe
 [![Deploy Status](https://img.shields.io/badge/deploy-GitHub%20Pages-00d4ff?style=for-the-badge&logo=github)](https://github.com)
 [![Vanilla JS](https://img.shields.io/badge/built%20with-Vanilla%20JS-f59e0b?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![No Framework](https://img.shields.io/badge/framework-none-10b981?style=for-the-badge)](.)
-[![Physics Engine](https://img.shields.io/badge/physics-Newton%20%7C%20Euler-8b5cf6?style=for-the-badge)](.)
+[![Physics Engine](https://img.shields.io/badge/physics-Newton%20%7C%20Coulomb%20%7C%20Euler-8b5cf6?style=for-the-badge)](.)
+[![Version](https://img.shields.io/badge/version-1.1.0-00d4ff?style=for-the-badge)](.)
 [![License](https://img.shields.io/badge/license-MIT-f43f5e?style=for-the-badge)](LICENSE)
 
 <br>
@@ -93,8 +94,8 @@ F = G · m₁ · m₂ / r²        v = √(G·M/r)        E_total = KE + PE = ko
 
 | # | Eksperimen | Status | Fisika |
 |---|-----------|--------|--------|
-| 01 | 🌌 Gravitasi Universal | ✅ **Live** | F = Gm₁m₂/r² |
-| 02 | ⚡ Elektrostatika | 🔜 Coming Soon | F = kq₁q₂/r² |
+| 01 | 🌌 Gravitasi Universal | ✅ **v1.0** | F = Gm₁m₂/r² |
+| 02 | ⚡ Elektrostatika | ✅ **v1.1** | F = kq₁q₂/r² |
 | 03 | 🌊 Gelombang & Interferensi | 🔜 Coming Soon | y = A·sin(kx−ωt) |
 | 04 | 🔴 Pendulum & Chaos | 🔜 Coming Soon | θ̈ = −(g/L)·sinθ |
 | 05 | 🧬 Simulasi Ekosistem | 🔜 Coming Soon | Lotka-Volterra |
@@ -110,7 +111,8 @@ science-lab/
 ├── index.html                    ← Homepage + hero + experiment catalog
 │
 ├── experiments/
-│   └── gravity.html              ← Experiment page (canvas + sidebar)
+│   ├── gravity.html              ← Gravity experiment (v1.0)
+│   └── electrostatics.html       ← Electrostatics experiment (v1.1) ⚡ NEW
 │
 ├── css/
 │   ├── main.css                  ← Design tokens, reset, typography, buttons
@@ -126,11 +128,13 @@ science-lab/
     │   └── physics-object.js     ← Base class: mass, position, velocity, Euler integration
     │
     ├── ui/
-    │   ├── controls.js           ← DOM → experiment API binding + live stats
-    │   └── tutorial.js           ← Step-by-step overlay system
+    │   ├── controls.js               ← DOM → experiment API binding + live stats
+    │   ├── tutorial.js               ← Step-by-step overlay system
+    │   └── tutorial-electrostatics.js ← Tutorial steps for Coulomb's Law ⚡ NEW
     │
     └── experiments/
-        └── gravity.js            ← N-body gravity: forces, rendering, trail, energy
+        ├── gravity.js            ← N-body gravity: forces, rendering, trail, energy
+        └── electrostatics.js     ← Coulomb's Law: N-body charges, field lines, heatmap ⚡ NEW
 ```
 
 ### Design Principles
@@ -245,7 +249,7 @@ A  @  185.199.111.153
 
 ```
 v1.0  ✅  Gravity N-body + physics engine core
-v1.1  🔜  Electrostatics (Coulomb's Law)
+v1.1  ✅  Electrostatics — Coulomb's Law + field lines + heatmap
 v1.2  🔜  Wave interference simulator
 v1.3  🔜  Double pendulum + chaos visualization
 v2.0  🔜  3D Solar System (Three.js)
