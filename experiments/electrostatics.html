@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elektrostatika — ScienceLab Virtual</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    body { overflow: hidden; }
+    @media (max-width: 768px) { body { overflow: auto; } }
+
+    /* Override grid/glow to blue tint for electrostatics theme */
+    :root {
+      --experiment-accent: #3b82f6;
+      --experiment-accent-2: #f43f5e;
+    }
+
+    .tut-toggle {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      cursor: pointer;
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--purple);
+      background: rgba(139,92,246,0.1);
+      color: #a78bfa;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
+    }
+    .tut-toggle:hover { background: rgba(139,92,246,0.22); box-shadow: 0 0 14px rgba(139,92,246,0.3); }
+
+    /* Charge legend */
+    .charge-legend {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .legend-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-2);
+    }
+    .legend-dot span {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Toggle row */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-2);
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 36px; height: 20px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      width: 12px; height: 12px;
+      left: 3px; top: 3px;
+      background: var(--text-3);
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    .toggle-switch input:checked + .toggle-track {
+      background: var(--cyan-dim);
+      border-color: var(--cyan);
+    }
+    .toggle-switch input:checked + .toggle-track::after {
+      background: var(--cyan);
+      left: 19px;
+    }
+
+    /* Charge type selector */
+    .charge-selector {
+      display: flex;
+      gap: 8px;
+    }
+    .charge-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .charge-btn.pos { color: #f43f5e; }
+    .charge-btn.neg { color: #3b82f6; }
+    .charge-btn.pos.active, .charge-btn.pos:hover {
+      background: rgba(244,63,94,0.15);
+      border-color: #f43f5e;
+      box-shadow: 0 0 12px rgba(244,63,94,0.3);
+    }
+    .charge-btn.neg.active, .charge-btn.neg:hover {
+      background: rgba(59,130,246,0.15);
+      border-color: #3b82f6;
+      box-shadow: 0 0 12px rgba(59,130,246,0.3);
+    }
+
+    /* Preset buttons */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Charge table */
+    .charge-table {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      width: 100%;
+    }
+    .charge-table tr { border-bottom: 1px solid var(--border); }
+    .charge-table td { padding: 4px 4px; color: var(--text-2); }
+    .charge-table td:first-child { color: var(--text-1); }
+    .charge-table td.pos { color: #f43f5e; }
+    .charge-table td.neg { color: #3b82f6; }
+    .charge-table td.speed { color: var(--amber); }
+
+    /* Canvas cursor based on mode */
+    #sim-canvas { cursor: crosshair; }
+    #sim-canvas.drag-mode { cursor: cell; }
+  </style>
+</head>
+<body>
+
+<!-- Binary rain background -->
+<div class="binary-bg">
+  <canvas id="binary-canvas"></canvas>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <a href="../index.html" class="nav-logo">
+    <div class="logo-icon">⚛</div>
+    SCIENCELAB
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../index.html#fisika" class="active">Fisika</a></li>
+    <li><a href="../index.html#biologi">Biologi</a></li>
+    <li><a href="../index.html#astronomi">Astronomi</a></li>
+  </ul>
+</nav>
+
+<!-- ══ EXPERIMENT PAGE ══ -->
+<div class="exp-page">
+
+  <!-- ── CANVAS ── -->
+  <main class="exp-main">
+    <div class="exp-topbar">
+      <div class="exp-breadcrumb">
+        <a href="../index.html" style="color:var(--text-2);">Home</a>
+        &nbsp;/&nbsp;Fisika&nbsp;/&nbsp;<span>Elektrostatika</span>
+      </div>
+      <div class="exp-topbar-right">
+        <span class="fps-badge" id="stat-fps">-- FPS</span>
+        <button class="tut-toggle" id="btn-tutorial">📚 Tutorial</button>
+      </div>
+    </div>
+    <canvas id="sim-canvas"></canvas>
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="exp-sidebar">
+
+    <!-- Simulation Controls -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Kontrol Simulasi</div>
+      <div class="btn-group" style="margin-bottom:10px;">
+        <button class="btn primary active" id="btn-start">▶ Start</button>
+        <button class="btn" id="btn-pause">⏸ Pause</button>
+        <button class="btn danger" id="btn-reset">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- Presets -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Preset Skenario</div>
+      <div class="preset-grid">
+        <button class="btn" id="btn-dipole" data-tip="Muatan + dan − diam">⚡ Dipole</button>
+        <button class="btn" id="btn-repulsion" data-tip="Grid muatan + semua">↔ Repulsion</button>
+        <button class="btn" id="btn-chain" data-tip="Rantai + − + −">⛓ Chain</button>
+        <button class="btn" id="btn-clear" style="color:var(--text-3);">🗑 Clear</button>
+      </div>
+    </div>
+
+    <!-- Add Charge -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Tambah Muatan</div>
+      <div class="charge-legend">
+        <div class="legend-dot"><span style="background:#f43f5e;box-shadow:0 0 6px #f43f5e;"></span> Positif (+)</div>
+        <div class="legend-dot"><span style="background:#3b82f6;box-shadow:0 0 6px #3b82f6;"></span> Negatif (−)</div>
+      </div>
+
+      <div class="control-row">
+        <label>Pilih Tipe Muatan</label>
+        <div class="charge-selector">
+          <button class="charge-btn pos active" id="btn-pos">+ Positif</button>
+          <button class="charge-btn neg" id="btn-neg">− Negatif</button>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <label>Besar Muatan (q)</label>
+        <input type="number" id="in-charge" value="3" min="1" max="20" step="1">
+      </div>
+
+      <div style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-3); padding: 6px 0 2px;">
+        💡 Klik di canvas untuk menempatkan muatan
+      </div>
+    </div>
+
+    <!-- Konstanta -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Konstanta Fisika</div>
+      <div class="control-row">
+        <label>Konstanta Coulomb (k)</label>
+        <div class="slider-row" style="margin-bottom:0;">
+          <input type="range" id="slider-k" min="1" max="25" step="0.1" value="8.99">
+          <span class="slider-val" id="val-k">8.99</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-3); margin-top:4px;">
+          F = k · q₁q₂ / r²
+        </div>
+      </div>
+    </div>
+
+    <!-- Visualisasi Toggle -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Visualisasi</div>
+
+      <div class="toggle-row">
+        <span class="toggle-label">⚡ Garis Medan Listrik</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-field" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span class="toggle-label">➡ Vektor Gaya</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-force" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span class="toggle-label">🌡 Heatmap Potensial</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-heatmap">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Data Real-Time</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Muatan</div>
+          <div class="stat-value" id="stat-objs">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FPS</div>
+          <div class="stat-value" id="stat-fps-s">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">KE (Kinetik)</div>
+          <div class="stat-value" id="stat-ke">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">PE (Potensial)</div>
+          <div class="stat-value" id="stat-pe">--</div>
+        </div>
+        <div class="stat-card wide">
+          <div class="stat-label">Energi Total (U)</div>
+          <div class="stat-value" id="stat-e" style="color:var(--amber);">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charge table -->
+    <div class="sidebar-section" style="flex:1;">
+      <div class="sidebar-title">Status Muatan</div>
+      <table class="charge-table">
+        <tbody id="charge-table-body">
+          <tr><td colspan="3" style="color:var(--text-3);text-align:center;padding:8px;">— menunggu simulasi...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Terminal -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">System Log</div>
+      <div class="terminal" id="terminal-log">
+        <div class="log-line">[BOOT] ScienceLab Virtual v1.1.0</div>
+        <div class="log-line">[INIT] Electrostatics module loaded</div>
+        <div class="log-line">[INIT] F = k·q₁·q₂/r² ready</div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ══ THEORY SECTION ══ -->
+<div style="background: var(--bg-1); border-top: 1px solid var(--border); padding: 60px 24px;">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <div class="section-header" style="text-align:left; margin-bottom:32px;">
+      <span class="tag">TEORI</span>
+      <h2 class="section-title" style="margin:12px 0 10px;">Hukum Coulomb & Elektrostatika</h2>
+      <p class="section-desc" style="text-align:left; max-width:100%;">
+        Gaya antara dua muatan listrik diam bersifat radial, sebanding dengan perkalian
+        muatannya, dan berbanding terbalik dengan kuadrat jaraknya.
+      </p>
+    </div>
+
+    <div class="formula-block">F = k · q₁ · q₂ / r²</div>
+
+    <div class="theory-grid">
+      <div class="theory-card">
+        <h4>Hukum Coulomb</h4>
+        <p>
+          Ditemukan oleh Charles-Augustin de Coulomb (1785) menggunakan torsion balance.
+          Strukturnya identik dengan gravitasi Newton, tapi gaya listrik 10³⁶× lebih kuat
+          dan bisa <b style="color:#f43f5e">menolak</b> (muatan sama) atau
+          <b style="color:#3b82f6">menarik</b> (muatan berlawanan).
+        </p>
+      </div>
+      <div class="theory-card">
+        <h4>Medan Listrik</h4>
+        <p>
+          Medan listrik <b>E</b> pada titik P adalah gaya per satuan muatan uji.
+          Visualisasi garis medan menunjukkan arah dan kekuatan medan.
+          <br><br>
+          <span style="font-family:var(--font-mono);color:var(--amber);">E = F/q = k·Q/r²</span>
+        </p>
+      </div>
+      <div class="theory-card">
+        <h4>Energi Potensial</h4>
+        <p>
+          Energi potensial sistem dua muatan:
+          <br><br>
+          <span style="font-family:var(--font-mono);color:var(--amber);">U = k · q₁ · q₂ / r</span>
+          <br><br>
+          U > 0 → muatan sejenis (energi tersimpan, tolak-menolak)<br>
+          U < 0 → muatan berlawanan (sistem terikat)
+        </p>
+      </div>
+      <div class="theory-card">
+        <h4>Perbandingan dengan Gravitasi</h4>
+        <p>
+          Coulomb vs Newton: kedua gaya mengikuti hukum inverse-square (1/r²).
+          <br><br>
+          Perbedaan: gaya listrik bisa <b>positif</b> dan <b>negatif</b>.
+          Gravitasi hanya <b>tarik-menarik</b>.
+          <br><br>
+          F_elec / F_grav ≈ 10³⁶ untuk dua proton!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>
+    <span style="font-family:var(--font-head); color:var(--cyan);">SCIENCELAB VIRTUAL</span>
+    &nbsp;·&nbsp; Eksperimen: Elektrostatika
+    &nbsp;·&nbsp; F = k·q₁q₂/r²
+  </p>
+</footer>
+
+<!-- ══ SCRIPT ══ -->
+<script type="module">
+  import { ElectrostaticsExperiment } from '../js/experiments/electrostatics.js';
+  import { Tutorial } from '../js/ui/tutorial.js';
+  import { ELECTROSTATICS_TUTORIAL } from '../js/ui/tutorial-electrostatics.js';
+
+  // ── Binary rain ──
+  (function() {
+    const canvas = document.getElementById('binary-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    const cols  = Math.floor(window.innerWidth / 18);
+    const drops = Array.from({ length: cols }, () => Math.random() * -50);
+    const chars = '01±∑∫';
+    function draw() {
+      ctx.fillStyle = 'rgba(2,6,23,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#3b82f6';
+      ctx.font = '12px monospace';
+      drops.forEach((y, i) => {
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 18, y * 18);
+        drops[i] = y > canvas.height / 18 + 20 ? 0 : y + 1;
+      });
+    }
+    setInterval(draw, 80);
+  })();
+
+  // ── Canvas sizing ──
+  const canvas = document.getElementById('sim-canvas');
+  function sizeCanvas() {
+    const main = canvas.parentElement;
+    canvas.width  = main.clientWidth;
+    canvas.height = main.clientHeight - 48;
+  }
+  sizeCanvas();
+
+  // ── Init experiment ──
+  const exp = new ElectrostaticsExperiment(canvas);
+
+  window.addEventListener('resize', () => {
+    sizeCanvas();
+    exp.resize(canvas.width, canvas.height);
+  });
+
+  // ── Log helper ──
+  function log(msg) {
+    const el   = document.getElementById('terminal-log');
+    if (!el) return;
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.textContent = `[${time}] > ${msg}`;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+    while (el.children.length > 50) el.removeChild(el.firstChild);
+  }
+
+  // ── Controls ──
+  document.getElementById('btn-start')?.addEventListener('click', () => {
+    exp.start();
+    document.getElementById('btn-start').classList.add('active');
+    document.getElementById('btn-pause').classList.remove('active');
+    log('Simulation started');
+  });
+
+  document.getElementById('btn-pause')?.addEventListener('click', () => {
+    exp.pause();
+    document.getElementById('btn-pause').classList.add('active');
+    document.getElementById('btn-start').classList.remove('active');
+    log('Simulation paused');
+  });
+
+  document.getElementById('btn-reset')?.addEventListener('click', () => {
+    exp.reset();
+    exp.start();
+    log('Reset to dipole preset');
+  });
+
+  // ── Presets ──
+  document.getElementById('btn-dipole')?.addEventListener('click', () => {
+    exp.reset(); exp.start(); log('Preset: Dipole');
+  });
+  document.getElementById('btn-repulsion')?.addEventListener('click', () => {
+    exp.presetRepulsion(); exp.start(); log('Preset: Repulsion lattice');
+  });
+  document.getElementById('btn-chain')?.addEventListener('click', () => {
+    exp.presetChain(); exp.start(); log('Preset: Alternating chain');
+  });
+  document.getElementById('btn-clear')?.addEventListener('click', () => {
+    exp.engine.clearObjects(); log('Canvas cleared');
+  });
+
+  // ── Coulomb constant slider ──
+  document.getElementById('slider-k')?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    exp.setK(val);
+    document.getElementById('val-k').textContent = val.toFixed(2);
+    log(`k constant → ${val.toFixed(2)}`);
+  });
+
+  // ── Visualisation toggles ──
+  document.getElementById('toggle-field')?.addEventListener('change', (e) => {
+    exp.showField = e.target.checked;
+    log(`Field lines: ${e.target.checked ? 'ON' : 'OFF'}`);
+  });
+  document.getElementById('toggle-force')?.addEventListener('change', (e) => {
+    exp.showForce = e.target.checked;
+    log(`Force vectors: ${e.target.checked ? 'ON' : 'OFF'}`);
+  });
+  document.getElementById('toggle-heatmap')?.addEventListener('change', (e) => {
+    exp.showHeatmap = e.target.checked;
+    exp._heatDirty = true;
+    log(`Potential heatmap: ${e.target.checked ? 'ON' : 'OFF'}`);
+  });
+
+  // ── Charge type selector ──
+  let selectedSign = +1;
+  document.getElementById('btn-pos')?.addEventListener('click', () => {
+    selectedSign = +1;
+    document.getElementById('btn-pos').classList.add('active');
+    document.getElementById('btn-neg').classList.remove('active');
+  });
+  document.getElementById('btn-neg')?.addEventListener('click', () => {
+    selectedSign = -1;
+    document.getElementById('btn-neg').classList.add('active');
+    document.getElementById('btn-pos').classList.remove('active');
+  });
+
+  // ── Click canvas to place charge ──
+  canvas.addEventListener('click', (e) => {
+    const rect   = canvas.getBoundingClientRect();
+    const x      = e.clientX - rect.left;
+    const y      = e.clientY - rect.top;
+    const q      = parseFloat(document.getElementById('in-charge')?.value || 3);
+    const charge = selectedSign * q;
+    exp.addChargeAt({ charge, x, y });
+    log(`Placed charge ${charge > 0 ? '+' : ''}${charge} at (${Math.round(x)}, ${Math.round(y)})`);
+  });
+
+  // ── Live stats loop ──
+  function updateStats() {
+    const stats  = exp.getStats?.()     || {};
+    const forces = exp.getForceData?.() || [];
+
+    const fpsBadge = document.getElementById('stat-fps');
+    const fpsSide  = document.getElementById('stat-fps-s');
+    if (fpsBadge) fpsBadge.textContent = `${exp.fps} FPS`;
+    if (fpsSide)  fpsSide.textContent  = exp.fps || '--';
+
+    const ke = document.getElementById('stat-ke');
+    const pe = document.getElementById('stat-pe');
+    const e  = document.getElementById('stat-e');
+    const no = document.getElementById('stat-objs');
+    if (ke) ke.textContent = stats.KE?.toFixed(1) || '--';
+    if (pe) pe.textContent = stats.PE?.toFixed(1) || '--';
+    if (e)  e.textContent  = stats.E?.toFixed(1)  || '--';
+    if (no) no.textContent = exp.objects?.length  || 0;
+
+    // Charge table
+    const tbody = document.getElementById('charge-table-body');
+    if (tbody && forces.length) {
+      tbody.innerHTML = forces.map(f => `
+        <tr>
+          <td class="${f.charge > 0 ? 'pos' : 'neg'}">${f.label}</td>
+          <td>${f.fixed ? '⚓ fixed' : '🔵 free'}</td>
+          <td class="speed">${f.speed} u/s</td>
+        </tr>
+      `).join('');
+    }
+
+    requestAnimationFrame(updateStats);
+  }
+  requestAnimationFrame(updateStats);
+
+  // ── Tutorial ──
+  const tutorial = new Tutorial(ELECTROSTATICS_TUTORIAL);
+  document.getElementById('btn-tutorial')?.addEventListener('click', () => {
+    if (tutorial.active) tutorial.stop();
+    else tutorial.start();
+  });
+
+  // ── Navbar scroll ──
+  const nav = document.querySelector('.navbar');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 20 ? 'rgba(2,6,23,0.97)' : 'rgba(2,6,23,0.85)';
+  });
+
+  // ── Auto-start ──
+  exp.start();
+  log('Electrostatics v1.1 — F = k·q₁·q₂/r²');
+</script>
+</body>
+</html>
